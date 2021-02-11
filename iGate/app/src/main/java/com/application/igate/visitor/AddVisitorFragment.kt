@@ -61,8 +61,12 @@ class AddVisitorFragment: BaseFragment() {
         }
 
         submit.setOnClickListener {
-
+            saveVistorInfo()
         }
+    }
+
+    private fun saveVistorInfo() {
+        
     }
 
     private fun requestPermission() {

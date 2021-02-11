@@ -21,9 +21,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         observeChanges()
-        Handler().postDelayed( {
-            RxBus.publish(AddVisitor())
-        }, 1000)
+        addFragmentToBackStack(AddVisitorFragment.newInstance())
     }
 
     private fun observeChanges() {
