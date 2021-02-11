@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">iGate</string>
+    <string name="igate_app">iGate</string>
+    <string name="enter_visitor_details">Enter Visitor Details</string>
+    <string name="visitor_name">Visitor Name <font color='#FF0000'>*</font></string>
+    <string name="visitor_number">Contact Number <font color='#FF0000'>*</font></string>
+    <string name="visitor_purpose">Purpose <font color='#FF0000'>*</font></string>
+    <string name="please_take_photo">Visitor Photo</string>
+    <string name="visitor_email">Visitor Email</string>
+    <string name="visitor_address">Visitor Address</string>
+    <string name="meeting">Meeting (Flat No/Person Name) <font color='#FF0000'>*</font></string>
+    <string name="enter_name_here">Enter Name Here</string>
+    <string name="enter_number_here">Enter Number Here</string>
+    <string name="enter_email_here">Enter Email Here</string>
+    <string name="enter_address_here">Enter Address Here</string>
+    <string name="enter_flat_here">Enter FlatNo/Person Here</string>
+    <string name="enter_purpose_here">Enter Purpose Here</string>
+    <string name="submit">Submit</string>
 </resources>

@@ -7,4 +7,37 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextViewTitleTheme">
+        <item name="android:textAlignment">center</item>
+        <item name="fontFamily">sans-serif-black</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:textColor">#E30425</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TextViewSubTextTheme">
+        <item name="android:textAlignment">center</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">17dp</item>
+    </style>
+
+    <style name="TextViewVisitorDetailsTheme">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="EditTextVisitorDetailsTheme">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:textAlignment">center</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">17dp</item>
+    </style>
+
 </resources>
