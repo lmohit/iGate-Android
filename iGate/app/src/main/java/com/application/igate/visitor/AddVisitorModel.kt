@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.application.igate.model.visitor.Visitor
 import com.application.igate.network.RetrofitService
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import java.sql.Timestamp
 
@@ -23,7 +23,7 @@ class AddVisitorModel {
         purpose: String,
         flatNo: String,
         timestamp: Timestamp,
-        photo: File
+        photo: File?
     ) {
         disposable.add(
             RetrofitService.restClient
@@ -49,7 +49,7 @@ class AddVisitorModel {
         purpose: String,
         flatNo: String,
         timestamp: Timestamp,
-        photo: File
+        photo: File?
     ): Visitor {
         return Visitor(
             photo,

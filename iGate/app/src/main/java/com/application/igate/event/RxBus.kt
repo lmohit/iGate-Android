@@ -1,6 +1,7 @@
 package com.application.igate.event
 
-import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.subjects.PublishSubject
+
 
 class RxBus {
     companion object {

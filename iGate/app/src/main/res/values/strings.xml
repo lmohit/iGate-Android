@@ -16,4 +16,10 @@
     <string name="enter_flat_here">Enter FlatNo/Person Here</string>
     <string name="enter_purpose_here">Enter Purpose Here</string>
     <string name="submit">Submit</string>
+    <string name="enter_name">Enter Visitor Name</string>
+    <string name="enter_number">Enter Visitor Number</string>
+    <string name="enter_purpose">Enter Visitor Purpose</string>
+    <string name="enter_meeting">Enter Whom are you meeting</string>
+    <string name="take_photo">Take Visitor Photo</string>
+    <string name="visitor_added_suucessfully">Visitor added Successfully</string>
 </resources>

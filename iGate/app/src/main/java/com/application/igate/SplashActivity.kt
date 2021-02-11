@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import com.application.igate.event.AddVisitor
 import com.application.igate.event.RxBus
 import com.application.igate.visitor.AddVisitorFragment
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class SplashActivity : AppCompatActivity() {
 

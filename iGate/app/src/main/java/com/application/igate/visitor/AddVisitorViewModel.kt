@@ -20,7 +20,7 @@ class AddVisitorViewModel : ViewModel() {
         purpose: String,
         flatNo: String,
         timestamp: Timestamp,
-        photo: File
+        photo: File?
     ) {
         addVisitorModel
             .addVisitor(name, number, email, address, purpose, flatNo, timestamp, photo)
