@@ -38,7 +38,7 @@ class AddVisitorModel {
                     if (it.code == 200) {
                         commonStateMutableLiveData.postValue(AddVisitorUIModel.VisitorAdded())
                     } else {
-                        commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.result))
+                        commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.msg))
                     }
                 }.subscribe()
         )
@@ -55,7 +55,7 @@ class AddVisitorModel {
         photo: File?
     ): Visitor {
         return Visitor(
-            null,
+            photo?.readBytes(),
             number,
             name,
             email,

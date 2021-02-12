@@ -97,6 +97,8 @@
                     android:id="@+id/visitor_number"
                     style="@style/EditTextVisitorDetailsTheme"
                     android:layout_width="0dp"
+                    android:maxLength="10"
+                    android:inputType="number"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:hint="@string/enter_number_here" />
@@ -121,6 +123,7 @@
                     android:id="@+id/visitor_email"
                     style="@style/EditTextVisitorDetailsTheme"
                     android:layout_width="0dp"
+                    android:inputType="textEmailAddress"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.6"
                     android:hint="@string/enter_email_here" />

@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
     private fun observeChanges() {
         Log.d(TAG, "observeChanges")
         disposable.add(RxBus.getObservable()
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 when (it) {
