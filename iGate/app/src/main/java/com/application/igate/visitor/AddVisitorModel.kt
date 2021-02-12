@@ -1,9 +1,11 @@
 package com.application.igate.visitor
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.application.igate.model.visitor.Visitor
 import com.application.igate.network.RetrofitService
+import com.google.gson.JsonObject
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import java.sql.Timestamp
@@ -22,7 +24,7 @@ class AddVisitorModel {
         address: String,
         purpose: String,
         flatNo: String,
-        timestamp: Timestamp,
+        timestamp: String,
         photo: File?
     ) {
         disposable.add(
@@ -32,10 +34,11 @@ class AddVisitorModel {
                         name, number, email, address, purpose, flatNo, timestamp, photo
                     )
                 ).map {
-                    if (it.status != 200) {
-                        commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.result))
-                    } else {
+                    Log.d(TAG, "" + it)
+                    if (it.code == 200) {
                         commonStateMutableLiveData.postValue(AddVisitorUIModel.VisitorAdded())
+                    } else {
+                        commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.result))
                     }
                 }.subscribe()
         )
@@ -48,11 +51,11 @@ class AddVisitorModel {
         address: String,
         purpose: String,
         flatNo: String,
-        timestamp: Timestamp,
+        timestamp: String,
         photo: File?
     ): Visitor {
         return Visitor(
-            photo,
+            null,
             number,
             name,
             email,
@@ -61,5 +64,9 @@ class AddVisitorModel {
             flatNo,
             timestamp
         )
+    }
+
+    companion object {
+        private val TAG = AddVisitorModel::class.java.simpleName
     }
 }

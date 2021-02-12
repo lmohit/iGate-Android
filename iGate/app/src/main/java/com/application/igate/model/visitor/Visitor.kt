@@ -11,5 +11,5 @@ data class Visitor(
     private val visitorPurpose: String,
     private val visitorAddress: String,
     private val meetingFlatNo: String,
-    private val visitingTime: Timestamp
+    private val visitingTime: String
 )

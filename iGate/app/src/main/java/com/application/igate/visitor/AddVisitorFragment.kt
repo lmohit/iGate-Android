@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -25,9 +27,7 @@ import com.application.igate.factory.ViewModelFactory
 import com.application.igate.utils.Utils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_add_visitor.*
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.sql.Timestamp
 
 
@@ -37,7 +37,13 @@ class AddVisitorFragment : BaseFragment() {
 
     private var viewModelFactory = ViewModelFactory()
 
-    private var visitorImageBitmap: Bitmap? = null
+    private var visitorImageUri: Uri? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +97,10 @@ class AddVisitorFragment : BaseFragment() {
         visitor_photo.setOnClickListener {
             if (checkPermissions()) {
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                val profilePhoto =
+                    File(Environment.getExternalStorageDirectory(), PROFILE_IMAGE_URI)
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(profilePhoto))
+                visitorImageUri = Uri.fromFile(profilePhoto)
                 startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST)
             } else {
                 requestPermission()
@@ -109,34 +119,43 @@ class AddVisitorFragment : BaseFragment() {
         val visitorAddress = visitor_address.text.toString()
         val visitorPurpose = visitor_purpose.text.toString()
         val visitorMeeting = visitor_meeting.text.toString()
-        getVisitorPhoto()
-        val visitorPhoto = visitorImageBitmap?.compress(
-            Bitmap.CompressFormat.PNG,
-            0,
-            ByteArrayOutputStream()
-        )
+        val visitorPhoto = getVisitorPhoto()
         if (TextUtils.isEmpty(visitorName)) {
-            Toast.makeText(context!!, resources.getString(R.string.enter_name), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context!!, resources.getString(R.string.enter_name), Toast.LENGTH_SHORT)
+                .show()
             return
         }
         if (TextUtils.isEmpty(visitorNumber)) {
-            Toast.makeText(context!!, resources.getString(R.string.enter_number), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context!!,
+                resources.getString(R.string.enter_number),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
         if (TextUtils.isEmpty(visitorPurpose)) {
-            Toast.makeText(context!!, resources.getString(R.string.enter_purpose), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context!!,
+                resources.getString(R.string.enter_purpose),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
         if (TextUtils.isEmpty(visitorMeeting)) {
-            Toast.makeText(context!!, resources.getString(R.string.enter_meeting), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context!!,
+                resources.getString(R.string.enter_meeting),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
         if (visitorPhoto == null) {
-            Toast.makeText(context!!, resources.getString(R.string.take_photo), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context!!, resources.getString(R.string.take_photo), Toast.LENGTH_SHORT)
+                .show()
             return
         }
         val time = System.currentTimeMillis()
-        val timestamp = Timestamp(time)
+        val timestamp = Timestamp(time).toString()
         viewModel.addVisitor(
             visitorName,
             visitorNumber,
@@ -145,47 +164,59 @@ class AddVisitorFragment : BaseFragment() {
             visitorPurpose,
             visitorMeeting,
             timestamp,
-            getVisitorPhoto()
+            visitorPhoto
         )
     }
 
     private fun getVisitorPhoto(): File? {
-//        val file = File(Environment.getExternalStorageState(), "profilePicture" + ".png")
-//        val fOut = FileOutputStream(file)
-//        visitorImageBitmap?.compress(Bitmap.CompressFormat.PNG, 85, fOut)
-//        return file
-        return null
+        return File(visitorImageUri?.path.orEmpty())
     }
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             activity!!,
-            arrayOf(Manifest.permission.CAMERA),
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
             PERMISSION_REQUEST_CODE
         );
     }
 
     private fun checkPermissions(): Boolean {
-        return (ContextCompat.checkSelfPermission(context!!, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED
-                )
+        val permissions = arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(context!!, permission)
+                != PackageManager.PERMISSION_GRANTED
+            ) return false
+        }
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             CAMERA_PIC_REQUEST -> {
-                visitorImageBitmap = data?.getParcelableExtra(IMAGE)
-                visitorImageBitmap?.let {
-                    loadImage()
+                Log.d(TAG, "URI : " + visitorImageUri)
+                visitorImageUri.let {
+                    val bitmap = MediaStore.Images.Media.getBitmap(
+                        activity?.contentResolver,
+                        it
+                    )
+                    loadImage(bitmap)
                 }
             }
         }
     }
 
-    private fun loadImage() {
+    private fun loadImage(bitmap: Bitmap) {
         Glide.with(context!!)
-            .load(visitorImageBitmap)
+            .load(bitmap)
             .skipMemoryCache(true)
             .into(visitor_photo)
     }
@@ -193,8 +224,8 @@ class AddVisitorFragment : BaseFragment() {
     companion object {
         private val TAG = AddVisitorFragment::class.java.simpleName
         private const val CAMERA_PIC_REQUEST = 100
-        private const val IMAGE = "data"
         private const val PERMISSION_REQUEST_CODE = 200
+        private const val PROFILE_IMAGE_URI = "ProfiePicture.jpg"
 
         fun newInstance(): AddVisitorFragment {
             return AddVisitorFragment()

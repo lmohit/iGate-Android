@@ -30,7 +30,6 @@ class SplashActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                Log.d(TAG, "observeChanges " + it)
                 when (it) {
                     is AddVisitor -> {
                         addFragmentToBackStack(AddVisitorFragment.newInstance())
@@ -44,11 +43,6 @@ class SplashActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
             .addToBackStack("")
             .commitAllowingStateLoss()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        disposable.dispose()
     }
 
     companion object {
