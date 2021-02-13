@@ -27,4 +27,9 @@
     <string name="visitor_details">Visitor Details</string>
     <string name="drawer_open">Drawer Open</string>
     <string name="drawer_close">Drawer Close</string>
+    <string name="visiting_time">Visiting Time</string>
+    <string name="visitor_name_detail">Visitor Name</string>
+    <string name="visitor_number_detail">Contact Number</string>
+    <string name="visitor_purpose_detail">Purpose</string>
+    <string name="meeting_detail">Flat No/Person Name</string>
 </resources>

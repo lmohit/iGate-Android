@@ -71,7 +71,7 @@ class AddVisitorFragment : BaseFragment() {
 
             is AddVisitorUIModel.Error -> {
                 showProgress(false, getString(R.string.loading))
-                showErrorMsg(uiModel)
+                showErrorMsg(uiModel.msg.orEmpty())
             }
 
             is AddVisitorUIModel.VisitorAdded -> {
@@ -84,14 +84,6 @@ class AddVisitorFragment : BaseFragment() {
                 RxBus.publish(AddVisitor())
             }
         }
-    }
-
-    private fun showErrorMsg(uiModel: AddVisitorUIModel.Error) {
-        Toast.makeText(
-            context!!,
-            uiModel.msg,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     private fun initViews() {

@@ -1,6 +1,7 @@
 package com.application.igate.network
 
 import com.application.igate.model.visitor.BaseResponse
+import com.application.igate.model.visitor.VisitorDetailsResponse
 import io.reactivex.Single
 import okhttp3.MultipartBody
 import retrofit2.http.*
@@ -19,4 +20,7 @@ interface ApiHelper {
         @Part("meetingFlatNo") meetingFlatNo: String,
         @Part("visitingTime") visitingTime: String
     ): Single<BaseResponse>
+
+    @GET("/visitor/getVisitDetails")
+    fun getVisitorDetails(): Single<VisitorDetailsResponse>
 }
