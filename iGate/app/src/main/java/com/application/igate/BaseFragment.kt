@@ -1,17 +1,23 @@
 package com.application.igate
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.application.igate.utils.Utils
 
 open class BaseFragment: Fragment() {
 
     var isAppInForegorund = true
 
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        progressDialog = ProgressDialog(context!!)
     }
 
     override fun onCreateView(
@@ -34,6 +40,15 @@ open class BaseFragment: Fragment() {
     override fun onPause() {
         super.onPause()
         isAppInForegorund = false
+    }
+
+    fun showProgress(show: Boolean, msg: String) {
+        if (show) {
+            progressDialog.setMessage(msg)
+            progressDialog.show()
+        } else {
+            progressDialog.dismiss()
+        }
     }
 
     companion object {

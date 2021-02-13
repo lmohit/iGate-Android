@@ -3,16 +3,21 @@ package com.application.igate.visitor
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.application.igate.model.visitor.BaseResponse
 import com.application.igate.model.visitor.Visitor
 import com.application.igate.network.RetrofitService
 import com.google.gson.JsonObject
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposables
+import io.reactivex.schedulers.Schedulers
 import java.io.File
 import java.sql.Timestamp
 
 class AddVisitorModel {
 
-    private val disposable = CompositeDisposable()
+    private var disposable = Disposables.empty()
     private val commonStateMutableLiveData = MutableLiveData<AddVisitorUIModel>()
     val commonStateLiveData: LiveData<AddVisitorUIModel>
         get() = commonStateMutableLiveData
@@ -27,21 +32,25 @@ class AddVisitorModel {
         timestamp: String,
         photo: File?
     ) {
-        disposable.add(
+        commonStateMutableLiveData.postValue(AddVisitorUIModel.ShowProgress(true))
+        disposable =
             RetrofitService.restClient
                 .addVisitor(
                     getRequestBody(
                         name, number, email, address, purpose, flatNo, timestamp, photo
                     )
                 ).map {
-                    Log.d(TAG, "" + it)
+                    commonStateMutableLiveData.postValue(AddVisitorUIModel.ShowProgress(false))
                     if (it.code == 200) {
                         commonStateMutableLiveData.postValue(AddVisitorUIModel.VisitorAdded())
-                    } else {
-                        commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.msg))
                     }
-                }.subscribe()
-        )
+                    it
+                }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.message))
+                }
+                .subscribe()
     }
 
     private fun getRequestBody(

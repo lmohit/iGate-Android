@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitService {
 
-    private const val CONNECTION_TIMEOUT = 10000L
+    private const val CONNECTION_TIMEOUT = 100L
     private var retrofit: ApiHelper? = null
 
     private val httpClient: OkHttpClient

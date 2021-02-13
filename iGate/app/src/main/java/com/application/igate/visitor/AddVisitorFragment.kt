@@ -66,7 +66,7 @@ class AddVisitorFragment : BaseFragment() {
     private fun handleCommonStateData(uiModel: AddVisitorUIModel) {
         when (uiModel) {
             is AddVisitorUIModel.ShowProgress -> {
-                Utils.showProgress(uiModel.show)
+                showProgress(uiModel.show, getString(R.string.loading))
             }
 
             is AddVisitorUIModel.Error -> {

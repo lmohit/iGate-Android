@@ -4,8 +4,5 @@ class Utils {
 
     companion object {
 
-        fun showProgress(show: Boolean) {
-
-        }
     }
 }
