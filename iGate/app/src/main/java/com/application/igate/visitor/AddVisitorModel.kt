@@ -1,19 +1,16 @@
 package com.application.igate.visitor
 
-import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.application.igate.model.visitor.BaseResponse
-import com.application.igate.model.visitor.Visitor
 import com.application.igate.network.RetrofitService
-import com.google.gson.JsonObject
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.File
-import java.sql.Timestamp
 
 class AddVisitorModel {
 
@@ -36,46 +33,42 @@ class AddVisitorModel {
         disposable =
             RetrofitService.restClient
                 .addVisitor(
-                    getRequestBody(
-                        name, number, email, address, purpose, flatNo, timestamp, photo
-                    )
-                ).map {
-                    commonStateMutableLiveData.postValue(AddVisitorUIModel.ShowProgress(false))
-                    if (it.code == 200) {
-                        commonStateMutableLiveData.postValue(AddVisitorUIModel.VisitorAdded())
-                    }
-                    it
-                }.subscribeOn(Schedulers.io())
+                    prepareProfilePhotoPart(photo),
+                    number, name, email, purpose, address, flatNo, timestamp
+                )
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(it.message))
-                }
-                .subscribe()
+                .subscribe(::visitorAdded, ::visitorSaveFailed)
     }
 
-    private fun getRequestBody(
-        name: String,
-        number: String,
-        email: String,
-        address: String,
-        purpose: String,
-        flatNo: String,
-        timestamp: String,
-        photo: File?
-    ): Visitor {
-        return Visitor(
-            photo?.readBytes(),
-            number,
-            name,
-            email,
-            purpose,
-            address,
-            flatNo,
-            timestamp
+    private fun visitorAdded(response: BaseResponse) {
+        if (response.code == 200) {
+            commonStateMutableLiveData.postValue(AddVisitorUIModel.VisitorAdded())
+        }
+    }
+
+    private fun visitorSaveFailed(throwable: Throwable) {
+        commonStateMutableLiveData.postValue(AddVisitorUIModel.Error(throwable.message))
+    }
+
+    private fun prepareProfilePhotoPart(profilePhoto: File?): MultipartBody.Part {
+        val requestFile: RequestBody = RequestBody.create(
+            MediaType.parse("multipart/form-data"),
+            profilePhoto
         )
+        return MultipartBody.Part.createFormData(VISITOR_PHOTO, profilePhoto?.name, requestFile)
+    }
+
+    private fun getMimeType(uri: String): String {
+        val extension = MimeTypeMap.getFileExtensionFromUrl(uri)
+        var type = ""
+        extension?.let {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension).orEmpty()
+        }
+        return type
     }
 
     companion object {
         private val TAG = AddVisitorModel::class.java.simpleName
+        private const val VISITOR_PHOTO = "visitorPhoto"
     }
 }

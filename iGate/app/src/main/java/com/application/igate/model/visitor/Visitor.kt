@@ -4,7 +4,6 @@ import java.io.File
 import java.sql.Timestamp
 
 data class Visitor(
-    private val visitorPhoto: ByteArray?,
     private val phoneNumber: String,
     private val visitorName: String,
     private val visitorEmailId: String,

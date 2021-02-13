@@ -70,10 +70,12 @@ class AddVisitorFragment : BaseFragment() {
             }
 
             is AddVisitorUIModel.Error -> {
+                showProgress(false, getString(R.string.loading))
                 showErrorMsg(uiModel)
             }
 
             is AddVisitorUIModel.VisitorAdded -> {
+                showProgress(false, getString(R.string.loading))
                 Toast.makeText(
                     context!!,
                     resources.getString(R.string.visitor_added_suucessfully),
