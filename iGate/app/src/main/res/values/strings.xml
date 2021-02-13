@@ -23,4 +23,8 @@
     <string name="take_photo">Take Visitor Photo</string>
     <string name="visitor_added_suucessfully">Visitor added Successfully</string>
     <string name="loading">Loading</string>
+    <string name="add_visitor">Add Visitor</string>
+    <string name="visitor_details">Visitor Details</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
 </resources>
