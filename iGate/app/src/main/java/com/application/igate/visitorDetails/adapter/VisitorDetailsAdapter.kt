@@ -49,7 +49,7 @@ class VisitorDetailsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
 
     private fun loadImage(visitorPhoto: String, context: Context) {
         Glide.with(context)
-            .load(visitorPhoto.toByteArray())
+            .load(visitorPhoto)
             .placeholder(R.drawable.profile_pic)
             .into(itemView.visitor_photo)
     }
